@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0012",
+  "title": "S5 주간 리포트 /report (요약 화면, 게이트는 라우팅에서 적용)",
+  "files": [
+    "src/pages/Report.tsx"
+  ],
+  "dependsOn": [
+    "0004"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:18.904Z",
+  "status": "kit_ready"
+}

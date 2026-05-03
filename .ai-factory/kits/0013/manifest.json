@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0013",
+  "title": "S6 배지 보관함 /badge (배지 리스트)",
+  "files": [
+    "src/pages/Badge.tsx"
+  ],
+  "dependsOn": [
+    "0004"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:19.127Z",
+  "status": "kit_ready"
+}

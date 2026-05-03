@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0006",
+  "title": "공용 UI 컴포넌트: 습관 행(HabitListRow)",
+  "files": [
+    "src/components/HabitListRow.tsx"
+  ],
+  "dependsOn": [
+    "0001"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:15.976Z",
+  "status": "kit_ready"
+}

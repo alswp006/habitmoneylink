@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0011",
+  "title": "S4 목표 설정 /goal (활성 목표 upsert)",
+  "files": [
+    "src/pages/Goal.tsx"
+  ],
+  "dependsOn": [
+    "0004"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:18.461Z",
+  "status": "kit_ready"
+}

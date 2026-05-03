@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0017",
+  "title": "라우팅 와이어링 + Provider 연결 + 통합 폴리시",
+  "files": [
+    "src/App.tsx"
+  ],
+  "dependsOn": [
+    "0016"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:20.143Z",
+  "status": "kit_ready"
+}

@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0007",
+  "title": "S0 차단 화면 Blocking",
+  "files": [
+    "src/pages/Blocking.tsx"
+  ],
+  "dependsOn": [
+    "0001"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:16.270Z",
+  "status": "kit_ready"
+}

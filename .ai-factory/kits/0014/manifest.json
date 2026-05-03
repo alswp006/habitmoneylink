@@ -1,0 +1,15 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0014",
+  "title": "S7 배지 잠금 해제 /badge/unlock (언락 요청, 중복 409 처리)",
+  "files": [
+    "src/pages/BadgeUnlock.tsx"
+  ],
+  "dependsOn": [
+    "0004",
+    "0001"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:19.343Z",
+  "status": "kit_ready"
+}

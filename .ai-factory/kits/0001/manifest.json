@@ -1,0 +1,12 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0001",
+  "title": "논리 스키마 Type 고정 + StorageError/HTTP-like status + RouteState",
+  "files": [
+    "src/lib/types.ts"
+  ],
+  "dependsOn": [],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:14.200Z",
+  "status": "kit_ready"
+}

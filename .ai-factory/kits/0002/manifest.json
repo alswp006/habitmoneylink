@@ -1,0 +1,15 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0002",
+  "title": "localStorage base IO 유틸 + 키 상수",
+  "files": [
+    "src/lib/storage/keys.ts",
+    "src/lib/storage/base.ts"
+  ],
+  "dependsOn": [
+    "0001"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:14.581Z",
+  "status": "kit_ready"
+}

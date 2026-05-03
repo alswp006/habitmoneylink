@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0010",
+  "title": "S3 습관 수정 /habit/:habitId/edit (조회/수정/삭제/활성 토글)",
+  "files": [
+    "src/pages/HabitEdit.tsx"
+  ],
+  "dependsOn": [
+    "0004"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:17.934Z",
+  "status": "kit_ready"
+}

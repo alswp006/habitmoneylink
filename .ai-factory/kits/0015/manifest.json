@@ -1,0 +1,21 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0015",
+  "title": "Integration 1/2: App.tsx 라우팅 연결 + 세션/실행환경 가드(401)",
+  "files": [
+    "src/App.tsx"
+  ],
+  "dependsOn": [
+    "0007",
+    "0008",
+    "0009",
+    "0010",
+    "0011",
+    "0012",
+    "0013",
+    "0014"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:19.630Z",
+  "status": "kit_ready"
+}

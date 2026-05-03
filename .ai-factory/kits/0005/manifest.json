@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0005",
+  "title": "공용 UI 컴포넌트: 요약 카드(HeroSummaryCard)",
+  "files": [
+    "src/components/HeroSummaryCard.tsx"
+  ],
+  "dependsOn": [
+    "0001"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:15.685Z",
+  "status": "kit_ready"
+}

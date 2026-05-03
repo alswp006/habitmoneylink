@@ -1,0 +1,15 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0003",
+  "title": "엔티티 get/set + 최소 스키마 검증(타입가드)",
+  "files": [
+    "src/lib/storage/validate.ts",
+    "src/lib/storage/entities.ts"
+  ],
+  "dependsOn": [
+    "0002"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:14.950Z",
+  "status": "kit_ready"
+}

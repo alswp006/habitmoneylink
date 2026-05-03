@@ -1,0 +1,16 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0008",
+  "title": "S1 홈 / (로딩/빈상태/에러다이얼로그/체크인/요약/배너)",
+  "files": [
+    "src/pages/Home.tsx"
+  ],
+  "dependsOn": [
+    "0004",
+    "0005",
+    "0006"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:16.869Z",
+  "status": "kit_ready"
+}

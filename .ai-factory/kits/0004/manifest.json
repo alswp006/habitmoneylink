@@ -1,0 +1,15 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0004",
+  "title": "KST 날짜 유틸 + AppStore 하이드레이션/인덱스/FK검증/리셋 + write 뮤테이션",
+  "files": [
+    "src/lib/date/kst.ts",
+    "src/lib/store/AppStore.tsx"
+  ],
+  "dependsOn": [
+    "0003"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:15.380Z",
+  "status": "kit_ready"
+}

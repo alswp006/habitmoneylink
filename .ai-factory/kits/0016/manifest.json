@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0016",
+  "title": "Integration 2/2: 광고/보상형 게이트/TabBar/507 토스트 폴리시 최종 폴리시",
+  "files": [
+    "src/App.tsx"
+  ],
+  "dependsOn": [
+    "0015"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:19.878Z",
+  "status": "kit_ready"
+}

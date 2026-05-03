@@ -1,0 +1,14 @@
+{
+  "projectId": "proj-habitmoneylink",
+  "packetId": "0009",
+  "title": "S2 습관 생성 /habit/new (카테고리 시트 + 입력 + 저장)",
+  "files": [
+    "src/pages/HabitNew.tsx"
+  ],
+  "dependsOn": [
+    "0004"
+  ],
+  "platform": "toss",
+  "createdAt": "2026-05-03T22:16:17.417Z",
+  "status": "kit_ready"
+}
