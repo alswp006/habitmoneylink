@@ -1,73 +1,173 @@
-import { Top, Paragraph, Spacing, ListRow, Button } from '@toss/tds-mobile';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Top, Paragraph, Spacing, ListRow, Button, Toast, AlertDialog } from '@toss/tds-mobile';
+import { generateHapticFeedback } from '@apps-in-toss/web-framework';
+import { useAppStore } from '@/lib/store/AppStore';
+import { HeroSummaryCard } from '@/components/HeroSummaryCard';
+import { HabitListRow } from '@/components/HabitListRow';
+import { AdSlot } from '@/components/AdSlot';
+import { getTodayKstYmd } from '@/lib/date/kst';
+import type { Goal, CheckIn } from '@/lib/types';
 
-/**
- * Golden Home page — TDS Mobile reference template.
- *
- * AI agents writing other pages should mimic these patterns:
- * - <Top title={<Top.TitleParagraph>...}> for top navigation
- * - <Paragraph.Text typography="t5"> for body text (use t1~t7, st1~st13)
- * - <ListRow contents={<ListRow.Texts type="2RowTypeA" top bottom />}> for list items
- * - <Spacing size={N}> between sections (NEVER use margin/padding on TDS components)
- * - <Button variant="fill"> for primary CTA (variants: 'fill' | 'weak' only)
- * - Layout containers (flex/grid wrappers) MAY use inline padding for outer gutters.
- *
- * Scaffold tokens (replaced by scaffold-toss.ts at project creation):
- *   HabitMoneyLink -> the app's display name
- *   나쁜 습관(담배·커피·배달)을 끊으면 절약되는 돈을 실시간으로 쌓아 목표 자산과 연결하는 동기 부여 앱    -> the one-line description
- */
+function formatKRW(amount: number): string {
+  return new Intl.NumberFormat('ko-KR').format(amount) + '원';
+}
 
-const HIGHLIGHTS = [
-  { title: '간편한 사용', description: '몇 번의 터치로 결과를 확인하세요' },
-  { title: '빠른 처리', description: '복잡한 입력 없이 바로 시작합니다' },
-  { title: '안전한 보관', description: '데이터는 이 기기에만 저장됩니다' },
-];
+function computeGoalSummary(
+  activeGoal: Goal | null,
+  totalSaved: number,
+  checkIns: CheckIn[],
+): string {
+  if (!activeGoal) return '';
+  const remaining = activeGoal.targetAmountKRW - totalSaved;
+  if (remaining <= 0) return `${activeGoal.title} 달성!`;
 
-export default function Home() {
+  const uniqueDays = new Set(checkIns.map((ci) => ci.date)).size;
+  if (uniqueDays === 0 || totalSaved === 0) return activeGoal.title;
+
+  const avgDaily = totalSaved / uniqueDays;
+  const daysLeft = Math.ceil(remaining / avgDaily);
+  return `${activeGoal.title}까지 D-${daysLeft}`;
+}
+
+export default function HomePage() {
   const navigate = useNavigate();
+  const {
+    isHydrating, habits, checkIns, activeGoal, storageError,
+    createCheckIn, resetAll,
+  } = useAppStore();
+
+  const [toastOpen, setToastOpen] = useState(false);
+
+  if (isHydrating) {
+    return <Paragraph.Text typography="t6">불러오는 중</Paragraph.Text>;
+  }
+
+  const today = getTodayKstYmd();
+  const activeHabits = habits.filter((h) => h.isActive);
+  const totalSaved = checkIns.reduce((sum, ci) => sum + ci.savedAmountKRW, 0);
+  const isSchemaError =
+    storageError?.code === 'PARSE_ERROR' || storageError?.code === 'SCHEMA_MISMATCH';
+
+  const goalSummary = computeGoalSummary(activeGoal, totalSaved, checkIns);
+
+  const handleCheckIn = (habitId: string, savedAmountKRW: number) => {
+    try {
+      createCheckIn({ habitId, date: today, savedAmountKRW });
+      generateHapticFeedback({ type: 'success' });
+      setToastOpen(true);
+    } catch {
+      // DUPLICATE: already checked in today — ignore
+    }
+  };
 
   return (
     <>
-      <Top
-        title={
-          <Top.TitleParagraph>HabitMoneyLink</Top.TitleParagraph>
+      <Top title={<Top.TitleParagraph>세이브스트릭</Top.TitleParagraph>} />
+
+      <Spacing size={16} />
+      <HeroSummaryCard
+        accumulatedLabel="누적 절약액"
+        accumulatedValue={formatKRW(totalSaved)}
+        goalSummary={goalSummary}
+        onGoalClick={() => {
+          generateHapticFeedback({ type: 'tickWeak' });
+          navigate('/goal');
+        }}
+      />
+
+      <Spacing size={16} />
+      <AdSlot adGroupId="savestreak-home-banner" />
+
+      <Spacing size={24} />
+      <Paragraph.Text typography="t4">오늘의 습관</Paragraph.Text>
+      <Spacing size={12} />
+
+      {activeHabits.length === 0 ? (
+        <>
+          <Paragraph.Text typography="st8">
+            아직 습관이 없어요. 습관을 추가해보세요.
+          </Paragraph.Text>
+          <Spacing size={12} />
+          <Button
+            variant="weak"
+            onClick={() => {
+              generateHapticFeedback({ type: 'tickWeak' });
+              navigate('/habit/new');
+            }}
+          >
+            습관 추가
+          </Button>
+        </>
+      ) : (
+        activeHabits.map((habit) => (
+          <HabitListRow
+            key={habit.id}
+            title={habit.title}
+            bottomText={`${formatKRW(habit.unitPriceKRW)} 아꼈어요`}
+            onRowClick={() => {
+              generateHapticFeedback({ type: 'tickWeak' });
+              navigate(`/habit/${habit.id}/edit`);
+            }}
+            onCheckInClick={() => handleCheckIn(habit.id, habit.unitPriceKRW)}
+          />
+        ))
+      )}
+
+      <Spacing size={24} />
+      <Paragraph.Text typography="t4">둘러보기</Paragraph.Text>
+      <Spacing size={12} />
+      <ListRow
+        onClick={() => {
+          generateHapticFeedback({ type: 'tickWeak' });
+          navigate('/habit/new');
+        }}
+        contents={
+          <ListRow.Texts type="2RowTypeA" top="습관 추가" bottom="새 절약 습관을 만들어요" />
+        }
+      />
+      <ListRow
+        onClick={() => {
+          generateHapticFeedback({ type: 'tickWeak' });
+          navigate('/report');
+        }}
+        contents={
+          <ListRow.Texts type="2RowTypeA" top="주간 리포트" bottom="이번 주 절약을 확인해요" />
+        }
+      />
+      <ListRow
+        onClick={() => {
+          generateHapticFeedback({ type: 'tickWeak' });
+          navigate('/badge');
+        }}
+        contents={
+          <ListRow.Texts type="2RowTypeA" top="배지 보관함" bottom="스트릭 배지를 모아요" />
         }
       />
 
-      {/* Hero subtitle */}
-      <div style={{ padding: '0 24px' }}>
-        <Spacing size={8} />
-        <Paragraph.Text typography="t5">나쁜 습관(담배·커피·배달)을 끊으면 절약되는 돈을 실시간으로 쌓아 목표 자산과 연결하는 동기 부여 앱</Paragraph.Text>
-        <Spacing size={32} />
-      </div>
+      <Toast
+        open={toastOpen}
+        position="bottom"
+        text="오늘도 절약 성공!"
+        onClose={() => setToastOpen(false)}
+      />
 
-      {/* Feature highlights (sample list — replace or extend per app) */}
-      <div>
-        {HIGHLIGHTS.map((h, idx) => (
-          <ListRow
-            key={idx}
-            contents={
-              <ListRow.Texts
-                type="2RowTypeA"
-                top={h.title}
-                bottom={h.description}
-              />
-            }
-          />
-        ))}
-      </div>
-
-      <Spacing size={32} />
-
-      {/* Primary CTA — flow-positioned (not fixed) for landing simplicity.
-          Form/result screens may use position:fixed bottom with safe-area padding. */}
-      <div style={{ padding: '0 24px' }}>
-        <Button variant="fill" onClick={() => navigate('/')}>
-          시작하기
-        </Button>
-      </div>
-
-      <Spacing size={24} />
+      <AlertDialog
+        open={isSchemaError}
+        title="데이터를 불러올 수 없어요"
+        description="초기화하면 다시 사용할 수 있어요."
+        alertButton={
+          <AlertDialog.AlertButton
+            onClick={() => {
+              generateHapticFeedback({ type: 'tickMedium' });
+              resetAll();
+            }}
+          >
+            초기화
+          </AlertDialog.AlertButton>
+        }
+        onClose={() => {}}
+      />
     </>
   );
 }

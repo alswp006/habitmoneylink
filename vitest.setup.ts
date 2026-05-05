@@ -11,8 +11,33 @@
 import { beforeEach, afterEach, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
-// ── localStorage / sessionStorage isolation ──
-// jsdom's storage persists between tests by default. Clear it to prevent pollution.
+// ── localStorage / sessionStorage polyfill ──
+// Node.js v22+ ships a built-in global localStorage that requires --localstorage-file
+// and lacks .clear() / may throw on .setItem(). Replace both with a full in-memory
+// implementation so tests are isolated and work identically across Node versions.
+function makeMemoryStorage(): Storage {
+  let store: Record<string, string> = {};
+  return {
+    get length() { return Object.keys(store).length; },
+    key(n: number) { return Object.keys(store)[n] ?? null; },
+    getItem(k: string) { return Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null; },
+    setItem(k: string, v: string) { store[k] = String(v); },
+    removeItem(k: string) { delete store[k]; },
+    clear() { store = {}; },
+  };
+}
+
+Object.defineProperty(globalThis, 'localStorage', {
+  value: makeMemoryStorage(),
+  writable: true,
+  configurable: true,
+});
+Object.defineProperty(globalThis, 'sessionStorage', {
+  value: makeMemoryStorage(),
+  writable: true,
+  configurable: true,
+});
+
 beforeEach(() => {
   localStorage.clear();
   sessionStorage.clear();

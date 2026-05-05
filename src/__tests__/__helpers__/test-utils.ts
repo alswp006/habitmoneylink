@@ -28,10 +28,13 @@ export function renderWithRouter(
 }
 
 // ── AppStore / AppState mock factory ──
-// Projects use either @/state/AppStateContext or @/lib/store/AppStore — try both.
-// If the project's actual path differs, override with vi.mock in the test file.
-export function mockAppState(overrides: Partial<AppStateMock> = {}) {
-  const defaultState: AppStateMock = {
+// NOTE: vi.mock() inside functions is hoisted by vitest to module level, which
+// causes ReferenceError when factory closures reference function-local variables.
+// Use vi.mock() at the TOP LEVEL of each test file instead.
+// mockAppState is kept for API compatibility but the mock must be registered
+// separately in the test file.
+export function mockAppState(overrides: Partial<AppStateMock> = {}): AppStateMock {
+  return {
     input: {},
     applyPreset: vi.fn(),
     updateField: vi.fn(),
@@ -41,19 +44,6 @@ export function mockAppState(overrides: Partial<AppStateMock> = {}) {
     error: null,
     ...overrides,
   };
-
-  // Mock both common paths — whichever the project uses will be picked up
-  vi.mock("@/state/AppStateContext", () => ({
-    useAppState: () => defaultState,
-    AppStateProvider: ({ children }: { children: React.ReactNode }) => children,
-  }));
-
-  vi.mock("@/lib/store/AppStore", () => ({
-    useAppStore: () => defaultState,
-    AppStoreProvider: ({ children }: { children: React.ReactNode }) => children,
-  }));
-
-  return defaultState;
 }
 
 export interface AppStateMock {
